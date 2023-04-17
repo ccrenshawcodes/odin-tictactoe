@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Delicious+Handrawn&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.header {
+    background-color: lightgreen;
+    box-shadow: -2px 5px 16px -4px #888888;
+    font-family: 'Delicious Handrawn', cursive;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5em;
+}
+
+.game-board {
+    margin: 2em;
+    width: 70%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2em;
+}
+
+.slot {
+    background-color: lightpink;
+    height: 6em;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
