@@ -4,6 +4,10 @@ let gameBoard = {
     thirdRow: ["", "", ""]
 };
 
+//prompt()s twice for player name.
+//assigns a token based on whether it's the first or second name.
+//pushes new Player objects to the playerArray 
+//returns the array, accessible as createPlayerArray.makePlayer() outside the scope
 const createPlayerArray = (() => {
     let playerArray = [];
 
@@ -14,36 +18,92 @@ const createPlayerArray = (() => {
         }
     }
 
-    for (let i = 0; i < 2; i++) {
+    const makePlayer = () => {
+        for (let i = 0; i < 2; i++) {
 
-        function promptForName () {
-            return prompt('player name: ');
-        }
-
-        function determineToken () {
-            if (i === 0) {
-                return 'X';
-            } else if (i === 1) {
-                return 'O';
+            function promptForName () {
+                return prompt('player name: ');
             }
+    
+            function determineToken () {
+                if (i === 0) {
+                    return 'X';
+                } else if (i === 1) {
+                    return 'O';
+                }
+            }
+            
+            playerArray.push(Player(promptForName(), determineToken()));
+            
         }
-
-        playerArray.push(Player(promptForName(), determineToken()));
-    }
-
-    return { playerArray }
+        return playerArray;
+    };
+  
+    return { makePlayer };
 })();
 
 //decides whose turn it is
-const turnController = () => {
-    let activePlayer = createPlayerArray.playerArray[0];
-
+//returns the activePlayer
+//should be called after a turn
+const turnController = (() => {
+    const playerArray = createPlayerArray.makePlayer();
+    let activePlayer = playerArray[0];
+      
     const switchPlayerTurn = () => {
-        if (activePlayer === createPlayerArray.playerArray[0]) {
-            activePlayer = createPlayerArray.playerArray[1];
+        if (activePlayer === playerArray[0]) {
+            activePlayer = playerArray[1];
         } else {
-            activePlayer = createPlayerArray.playerArray[0];
+            activePlayer = playerArray[0];
         }
+        return activePlayer;
     }
-};
+    
 
+    return { 
+        switchPlayerTurn,
+        activePlayer
+    };
+  
+})();
+
+//pass in:
+//object.firstRow etc.,
+//0-indexed index
+//and player token (X or O)
+function placeToken (row, index, token) {
+    if (row[index] === '') {
+      row.splice(index, 1, token);
+    } else {
+        alert('please choose another spot.');
+    }
+}
+
+//win conditions
+//horizontal, vertical and diagonal
+//ugliest code ever. i hate it
+const checkForWinner = ((board) => {
+    for (const row in board) {
+      if (board[row][0] !== '') {
+        if (board[row][0] === board[row][1] && board[row][0] === board[row][2]) {
+          console.log(`Winner: ${board[row][0]}`);
+        }
+      }
+    }
+    
+  for (let i = 0; i < 3; i++) {
+    if (board.firstRow[i] !== '') {
+      if (board.firstRow[i] === board.secondRow[i] && board.firstRow[i] === board.thirdRow[i]) {
+      console.log(`winner! ${board.firstRow[i]}`);
+    }
+    }
+  }
+  
+  if (board.firstRow[0] === board.secondRow[1] && board.firstRow[0] === board.thirdRow[2] && board.firstRow[0] !== '') {
+    console.log(`winner! ${board.firstRow[0]}`);
+  }
+  
+  if (board.firstRow[2] === board.secondRow[1] && board.firstRow[2] === board.thirdRow[0] && board.firstRow[2] !== '') {
+    console.log(`winner! ${board.firstRow[2]}`);
+  }
+  
+})(gameBoard);
