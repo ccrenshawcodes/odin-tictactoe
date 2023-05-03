@@ -1,7 +1,7 @@
 let gameBoard = {
-    firstRow: ["", "", ""],
-    secondRow: ["", "", ""],
-    thirdRow: ["", "", ""]
+    firstRow: ["a", "", ""],
+    secondRow: ["", "b", ""],
+    thirdRow: ["", "c", ""]
 };
 
 //prompt()s twice for player name.
@@ -42,13 +42,31 @@ const createPlayerArray = (() => {
     return { makePlayer };
 })();
 
-//decides whose turn it is
-//returns the activePlayer
-//should be called after a turn
+//should: place token, check win conditions, switch player
 const turnController = (() => {
     const playerArray = createPlayerArray.makePlayer();
-    let activePlayer = playerArray[0];
-      
+    let activePlayer = playerArray[0]; //can put .name or .token after the index
+    let activeToken = activePlayer.token;
+    const boardSpace = document.querySelector('game-board');
+
+    //loop through the array values in gameBoard and
+    //print them as buttons in the DOM
+    //should probably be executed right away
+    //for some reason it is not working. it works in codepen more or less
+    //but is less nested there.
+    const drawBoard = (obj, space) => {
+      for (const arr in obj) {
+        obj[arr].forEach((cell, index) => {
+          const slotBtn = document.createElement('button');
+          slotBtn.classList.add('slot');
+          slotBtn.textContent = cell;
+          slotBtn.setAttribute('id', index);
+          space.appendChild(slotBtn);
+        });
+      }
+    };
+    drawBoard(gameBoard, boardSpace);
+
     const switchPlayerTurn = () => {
         if (activePlayer === playerArray[0]) {
             activePlayer = playerArray[1];
@@ -58,12 +76,10 @@ const turnController = (() => {
         return activePlayer;
     }
     
-
     return { 
         switchPlayerTurn,
         activePlayer
     };
-  
 })();
 
 //pass in:
@@ -81,6 +97,7 @@ function placeToken (row, index, token) {
 //win conditions
 //horizontal, vertical and diagonal
 //ugliest code ever. i hate it
+//I can use "every" for this...
 const checkForWinner = ((board) => {
     for (const row in board) {
       if (board[row][0] !== '') {
