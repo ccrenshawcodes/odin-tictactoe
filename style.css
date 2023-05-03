@@ -3,12 +3,12 @@
 * {
     box-sizing: border-box;
     margin: 0;
+    font-family: 'Delicious Handrawn', cursive;
 }
 
 .header {
     background-color: lightgreen;
     box-shadow: -2px 5px 16px -4px #888888;
-    font-family: 'Delicious Handrawn', cursive;
 }
 
 .content {
@@ -23,11 +23,13 @@
     width: 70%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2em;
+    gap: 1em;
 }
 
 .slot {
     background-color: lightpink;
+    border: none;
+    font-size: larger;
     height: 6em;
     display: grid;
     justify-content: center;
