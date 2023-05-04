@@ -47,7 +47,7 @@ const turnController = (() => {
     const playerArray = createPlayerArray.makePlayer();
     let activePlayer = playerArray[0]; //can put .name or .token after the index
     let activeToken = activePlayer.token;
-    const boardSpace = document.querySelector('game-board');
+    const boardSpace = document.querySelector('.game-board');
 
     //loop through the array values in gameBoard and
     //print them as buttons in the DOM
