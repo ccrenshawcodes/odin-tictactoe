@@ -1,8 +1,8 @@
 const createGamePieces = (() => {
   let gameBoard = {
-    firstRow: ["a", "", ""],
-    secondRow: ["", "b", "f"],
-    thirdRow: ["", "c", ""]
+    firstRow: ["", "", ""],
+    secondRow: ["", "", ""],
+    thirdRow: ["", "", ""]
   };
 
   const getBoard = () => gameBoard;
@@ -56,7 +56,6 @@ const turnController = (() => {
       } else {
         activePlayer = playerArray[0];
       }
-      console.log(activePlayer);
       return activePlayer;
   }
 
@@ -113,40 +112,34 @@ const turnController = (() => {
 
 const viewController = (() => {
   const boardSpace = document.querySelector('.game-board');
+  const btns = document.querySelectorAll('.slot');
 
-  //loop through the array values in gameBoard and
-  //print them as buttons in the DOM
-  const drawBoard = (obj, space) => {
-    boardSpace.textContent = '';
+  function drawBoard(obj, nodes) {
+    let counter = 0;
     for (const arr in obj) {
       obj[arr].forEach((cell, index) => {
-        console.log(cell);
-        const slotBtn = document.createElement('button');
-        slotBtn.classList.add('slot');
-        slotBtn.textContent = cell;
-        slotBtn.setAttribute('data-row', arr);
-        slotBtn.setAttribute('id', index);
-        space.appendChild(slotBtn);
-      });
+        nodes[counter].textContent = cell;
+        nodes[counter].setAttribute('data-row', arr);
+        counter++;
+      })
     }
-  };
-  drawBoard(createGamePieces.getBoard(), boardSpace); //i think this has to be here. somehow
+  }
+  
+  drawBoard(createGamePieces.getBoard(), btns);
 
-
-  const playOnClick = (() => {
+  const playOnClick = () => {
     const slot = document.querySelectorAll('.slot');
     slot.forEach(item => {
       item.addEventListener('click', () => {
         let itemRow = item.getAttribute('data-row');
-        turnController.placeToken(itemRow, item.id, turnController.getActive().token);
-        console.table(createGamePieces.getBoard());
-        //console.log(turnController.activePlayer.token);
-        //drawBoard(createGamePieces.getBoard(), boardSpace); //with this here, we can only click once
-        turnController.checkForWinner(createGamePieces.getBoard());
+        let itemPosition = item.getAttribute('data-position');
+        turnController.placeToken(itemRow, itemPosition, turnController.getActive().token);
+        drawBoard(createGamePieces.getBoard(), btns);
+        //turnController.checkForWinner(createGamePieces.getBoard()); //I should put this inside placeToken instead
         })
       })
-  })();
+  };
+  playOnClick();
 
 
 })();
-
