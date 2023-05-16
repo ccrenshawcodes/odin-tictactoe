@@ -95,14 +95,16 @@ const turnController = (() => {
       result = true;
     }
 
-/*     const checkForTie = (() => {
+     const checkForTie = (() => {
       let resultsArr = [];
       for (const arr in board) {
         let result = board[arr].every(item => item !== ''); //what am I doing here
         resultsArr.push(result);
-        console.log(resultsArr);
+        result = resultsArr.every(item => item === true);
       }
-    })(board); */
+      
+    })(board);
+
     return result;
   };
 
@@ -161,7 +163,6 @@ const viewController = (() => {
         endGame();
       }
     }  
-
 
     const placeListeners = (() => {
       btns.forEach(item => {
