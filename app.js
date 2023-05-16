@@ -61,13 +61,6 @@ const turnController = (() => {
 
   const getActive = () => activePlayer;
 
-/*   function endGame (winner, display, myFunc) {
-    display.forEach(item => {
-      item.removeEventListener('click', myFunc);
-      alert(`${winner} wins!`);
-    })
-  } */
-
   const checkForWinner = (board) => {
 
     let result = false;
@@ -110,7 +103,6 @@ const turnController = (() => {
         console.log(resultsArr);
       }
     })(board); */
-    console.log(`result var in turncontroller: ${result}`);
     return result;
   };
 
@@ -122,14 +114,11 @@ const turnController = (() => {
     } else {
         alert('please choose another spot.');
     }
-
-    //checkForWinner(createGamePieces.getBoard());
   }
   
   return { 
       placeToken,
       getActive, 
-      //endGame,
       checkForWinner
   }
 
@@ -146,20 +135,16 @@ const viewController = (() => {
         nodes[counter].textContent = cell;
         nodes[counter].setAttribute('data-row', arr);
         counter++;
-/*         console.log(`done variable: ${done}`);
-        console.table(`current board: ${createGamePieces.getBoard().firstRow}`); */
-
       })
     }
   };
   
   drawBoard(createGamePieces.getBoard(), btns);
 
-  const playOnClick = () => {
+  const playOnClick = (() => {
 
     const endGame = () => {
       btns.forEach(item => {
-        console.log(`endgame's item: ${item}`);
         item.removeEventListener('click', listening);
       })
     }
@@ -167,33 +152,23 @@ const viewController = (() => {
     const listening = (e) => {
       let itemRow = e.target.getAttribute('data-row');
       let itemPosition = e.target.getAttribute('data-position');
+
       turnController.placeToken(itemRow, itemPosition, turnController.getActive().token);
       drawBoard(createGamePieces.getBoard(), btns);
+
       const done = turnController.checkForWinner(createGamePieces.getBoard());
-      console.log(`this is done! ${done}`);
       if (done === true) {
         endGame();
       }
     }  
 
 
-    const placeListeners = () => {
+    const placeListeners = (() => {
       btns.forEach(item => {
-        console.log(`adding event listeners here`);
         item.addEventListener('click', listening)
-/*           let itemRow = item.getAttribute('data-row');
-          let itemPosition = item.getAttribute('data-position');
-          turnController.placeToken(itemRow, itemPosition, turnController.getActive().token);
-          drawBoard(createGamePieces.getBoard(), btns); */
-
-          
         })
-    }
-    placeListeners();
+    })();
 
-  };
-  playOnClick();
-
-  //turnController.endGame(turnController.checkForWinner(), btns, playOnClick());
+  })();
 
 })();
