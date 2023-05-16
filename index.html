@@ -12,7 +12,13 @@
     <div class="header">
         <h1>Tic Tac Toe</h1>
 
+        <div class="controls">
+            <button class="start-game">Start game</button>
+            <button class="reset">Reset board</button>
+        </div>
     </div>
+
+
 
     <div class="content">
         <div class="game-board">
@@ -26,6 +32,21 @@
             <button class="slot" data-position='1'></button>
             <button class="slot" data-position='2'></button>
         </div>
+    </div>
+    <div class="modal">
+        <div class="modal-body">
+            <label for="player-one">Player one name:</label>
+            <input type="text" id="player-one"/>
+            <button id="add-player-one">Submit</button>
+            <span id="player-one-token"></span>
+
+            <label for="player-two">Player two name:</label>
+            <input type="text" id="player-two">
+            <button id="add-player-two">Submit</button>
+            <span id="player-two-token"></span>
+            <button class="play-game">Play Game!</button>
+        </div>
+
     </div>
     <script src="app.js" defer></script>
 </body>
