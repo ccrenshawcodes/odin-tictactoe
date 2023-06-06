@@ -48,14 +48,22 @@ const controlGameFlow = (() => {
 
     addPlayerOne.addEventListener('click', () => {
       playerList.push(Player(playerOneNameField.value, determineToken(playerList)));
+      activePlayer = playerList[0];
     })
 
     addPlayerTwo.addEventListener('click', () => {
       playerList.push(Player(playerTwoNameField.value, determineToken(playerList)));
     })
 
+
   })();
 
+  let activePlayer = playerList[0];
+  const switchPlayer = () => {
+    activePlayer === playerList[0] ? activePlayer = playerList[1] : activePlayer = playerList[0];
+  };
+
+  const getActive = () => activePlayer;
 
   function checkForWinner (board) {
     //  code will go here
@@ -63,13 +71,20 @@ const controlGameFlow = (() => {
   }
 
   return {
-    playerList,
     checkForWinner,
+    playerList,
+    getActive,
+    switchPlayer,
   }
 
 })();
 
+
+
+
+
 const controlDisplay = (() => {
+
 
   function renderBoard (board) {
     const slots = document.querySelectorAll('.slot');
@@ -82,6 +97,18 @@ const controlDisplay = (() => {
   }
   renderBoard(controlBoard.getBoard());
 
+  const handleClick = (e) => {
+    controlBoard.placeToken(controlBoard.getBoard(), e.target.getAttribute('data-position'), controlGameFlow.getActive().token);
+    controlGameFlow.switchPlayer(); 
+    renderBoard(controlBoard.getBoard());
+  }
+
+  const enableButtons = () => {
+    const slots = document.querySelectorAll('.slot');
+    slots.forEach(slot => {
+      slot.addEventListener('click', handleClick)
+    })
+  }
 
   //  open and close the modal
   const openModal = document.querySelector('.start-game');
@@ -92,13 +119,14 @@ const controlDisplay = (() => {
   closeBtn.addEventListener('click', () => {
     document.querySelector('.start-modal').style.display = 'none';
   })
-  
-  //  adds event listeners to the slots to allow us to place tokens
-  const slots = document.querySelectorAll('.slot');
-  slots.forEach(slot => {
-    slot.addEventListener('click', () => {
-      controlBoard.placeToken(controlBoard.getBoard(), slot.getAttribute('data-position'), 'C'); //need to change the 'C' to something meaningful
-      renderBoard(controlBoard.getBoard());
-    })
+
+
+  const startBtn = document.querySelector('.play-game');
+  startBtn.addEventListener('click', () => {
+    document.querySelector('.start-modal').style.display = 'none';
+    enableButtons();
+    //console.log(controlGameFlow.getActive());
   })
+  
+
 })();
