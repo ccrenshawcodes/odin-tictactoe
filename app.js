@@ -1,6 +1,6 @@
 const controlBoard = (() => {
 
-  const gameBoard = ['X','','','X','','','','O',''];
+  const gameBoard = ['','','','','','','','',''];
   const getBoard = () => gameBoard;
 
   const resetBoard = () => {
@@ -27,7 +27,6 @@ const controlBoard = (() => {
 
 const controlGameFlow = (() => {
 
-  //  creating the list of players
   let playerList = [];
 
   function Player (playerName, token) {
@@ -93,7 +92,7 @@ const controlGameFlow = (() => {
     ) {
       return true;
     } else if (!board.includes('')) { //handle tie
-      return true;
+      return 'tie';
     }
   }
 
@@ -110,6 +109,8 @@ const controlGameFlow = (() => {
 
 const controlDisplay = (() => {
   const slots = document.querySelectorAll('.slot');
+  const winnerMessage = document.querySelector('.winner-message');
+
 
   function renderBoard (board) {
     let counter = 0;
@@ -121,17 +122,10 @@ const controlDisplay = (() => {
   }
   renderBoard(controlBoard.getBoard());
 
-  //  this does not handle for ties yet
-  function displayWinnerName (winner) {
-    const winnerMessage = document.querySelector('.winner-message');
-    winnerMessage.textContent = `Winner: ${winner}!`;
-  }
-
   const endGame = () => {
     slots.forEach(slot => {
       slot.removeEventListener('click', handleClick);
     })
-    displayWinnerName(controlGameFlow.getActive().playerName);
   }
 
   const handleClick = (e) => {
@@ -139,8 +133,14 @@ const controlDisplay = (() => {
     renderBoard(controlBoard.getBoard());
 
     const done = controlGameFlow.checkForWinner(controlBoard.getBoard());
-    if (done === true) {
+    if (done === true || done === 'tie') {
       endGame();
+      if (done === true) {
+        winnerMessage.textContent = `Winner: ${controlGameFlow.getActive().playerName}!`;
+      } else if (done === 'tie') {
+        winnerMessage.textContent = `It's a tie!`;
+      }
+
     }
 
     controlGameFlow.switchPlayer(); 
@@ -167,7 +167,6 @@ const controlDisplay = (() => {
     document.querySelector('.start-modal').style.display = 'none';
     enableButtons();
     document.querySelector('.game-board').style.display = 'grid';
-
   })
 
   const resetBtn = document.querySelector('.reset');
@@ -176,6 +175,7 @@ const controlDisplay = (() => {
     controlBoard.resetBoard();
     controlGameFlow.clearPlayers();
     document.querySelector('.game-board').style.display = 'none';
+    document.querySelector('.winner-message').textContent = '';
   })
   
 
