@@ -37,19 +37,28 @@ button:hover {
     font-size: larger;
 }
 
+.controls > .start-game:hover {
+    background-color: lightgreen;
+}
+
 /* BOARD STYLES */
 
 .content {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-top: 3em;
 }
 
+.turn-display {
+    height: 1.5em;
+}
+
 .game-board {
     margin: 2em;
     width: 70%;
-    display: grid;
+    display: none;
     grid-template-columns: repeat(3, 1fr);
     gap: 1em;
     background-color: #e4e3e3;
@@ -68,6 +77,7 @@ button:hover {
 .slot:hover {
     box-shadow: none;
     transition: none;
+    cursor: default;
 }
 
 /* MODAL STYLES */
@@ -91,9 +101,22 @@ button:hover {
     border: none;
     border-radius: 10px;
     width: 50%; /*minmax thing */
-    height: 50%;
+    height: 40em;
     display: grid;
     gap: 0.5em;
+}
+
+.start-modal-body > .exit {
+    color: red;
+    font-weight: bold;
+    background-color: white;
+    font-size: larger;
+    justify-self: end;
+}
+
+.start-modal-body > .exit:hover {
+    transition: none;
+    box-shadow: none;
 }
 
 .start-modal-body > button {
