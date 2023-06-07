@@ -176,6 +176,18 @@ const controlDisplay = (() => {
     controlGameFlow.clearPlayers();
     document.querySelector('.game-board').style.display = 'none';
     document.querySelector('.winner-message').textContent = '';
+
+    const addPlayerOne = document.querySelector('#add-player-one');
+    const addPlayerTwo = document.querySelector('#add-player-two');
+    let playerOneNameField = document.querySelector('#player-one');
+    let playerTwoNameField = document.querySelector('#player-two');
+    addPlayerOne.style.display = 'block';
+    addPlayerTwo.style.display = 'block';
+    playerOneNameField.value = '';
+    playerOneNameField.disabled = false;
+    playerTwoNameField.value = '';
+    playerTwoNameField.disabled = false;
+
   })
   
 
