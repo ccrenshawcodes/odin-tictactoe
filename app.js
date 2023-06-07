@@ -1,7 +1,11 @@
 const controlBoard = (() => {
 
-  const gameBoard = ['x','','','x','','','','o',''];
+  const gameBoard = ['X','','','X','','','','O',''];
   const getBoard = () => gameBoard;
+
+  const resetBoard = () => {
+    gameBoard.forEach(item => item === '');
+  }
 
   function placeToken (board, position, player) {
     if (board[position] === '') {
@@ -16,6 +20,7 @@ const controlBoard = (() => {
   return {
     getBoard,
     placeToken,
+    resetBoard,
   }
 
 })();
@@ -23,7 +28,7 @@ const controlBoard = (() => {
 const controlGameFlow = (() => {
 
   //  creating the list of players
-  const playerList = [];
+  let playerList = [];
 
   function Player (playerName, token) {
     return {
@@ -55,8 +60,11 @@ const controlGameFlow = (() => {
       playerList.push(Player(playerTwoNameField.value, determineToken(playerList)));
     })
 
-
   })();
+
+  const clearPlayers = () => {
+    playerList = [];
+  }
 
   let activePlayer = playerList[0];
   const switchPlayer = () => {
@@ -66,8 +74,31 @@ const controlGameFlow = (() => {
   const getActive = () => activePlayer;
 
   function checkForWinner (board) {
-    //  code will go here
-    //  it will be ugly. Guaranteed
+
+    function displayWinnerMessage () {
+      const message = document.querySelector('.winner-message');
+      message.textContent = 'Winner!';
+    }
+
+    if (
+      // horizontal
+      (board[0] !== '' && board[0] === board[1] && board[0] === board[2]) ||
+      (board[3] !== '' && board[3] === board[4] && board[3] === board[5]) ||
+      (board[6] !== '' && board[6] === board[7] && board[6] === board[8]) ||
+      //  vertical
+      (board[0] !== '' && board[0] === board[3] && board[0] === board[6]) ||
+      (board[1] !== '' && board[1] === board[4] && board[1] === board[7]) ||
+      (board[2] !== '' && board[2] === board[5] && board[2] === board[8]) ||
+      //  diagonal
+      (board[0] !== '' && board[0] === board[4] && board[0] === board[8]) ||
+      (board[2] !== '' && board[2] === board[4] && board[2] === board[6])
+    ) {
+      displayWinnerMessage();
+      return true;
+    } else if (!board.includes('')) { //handle tie
+      displayWinnerMessage();
+      return true;
+    }
   }
 
   return {
@@ -75,19 +106,16 @@ const controlGameFlow = (() => {
     playerList,
     getActive,
     switchPlayer,
+    clearPlayers,
   }
 
 })();
 
 
-
-
-
 const controlDisplay = (() => {
-
+  const slots = document.querySelectorAll('.slot');
 
   function renderBoard (board) {
-    const slots = document.querySelectorAll('.slot');
     let counter = 0;
   
     board.forEach(item => {
@@ -97,14 +125,25 @@ const controlDisplay = (() => {
   }
   renderBoard(controlBoard.getBoard());
 
-  const handleClick = (e) => {
+
+  const endGame = () => {
+    slots.forEach(slot => {
+      slot.removeEventListener('click', handleClick);
+    })
+  }
+
+    const handleClick = (e) => {
     controlBoard.placeToken(controlBoard.getBoard(), e.target.getAttribute('data-position'), controlGameFlow.getActive().token);
     controlGameFlow.switchPlayer(); 
     renderBoard(controlBoard.getBoard());
+
+    const done = controlGameFlow.checkForWinner(controlBoard.getBoard());
+    if (done === true) {
+      endGame();
+    }
   }
 
   const enableButtons = () => {
-    const slots = document.querySelectorAll('.slot');
     slots.forEach(slot => {
       slot.addEventListener('click', handleClick)
     })
@@ -125,7 +164,16 @@ const controlDisplay = (() => {
   startBtn.addEventListener('click', () => {
     document.querySelector('.start-modal').style.display = 'none';
     enableButtons();
-    //console.log(controlGameFlow.getActive());
+    document.querySelector('.game-board').style.display = 'grid';
+
+  })
+
+  const resetBtn = document.querySelector('.reset');
+  resetBtn.addEventListener('click', () => {
+    endGame();
+    controlBoard.resetBoard();
+    controlGameFlow.clearPlayers();
+    document.querySelector('.game-board').style.display = 'none';
   })
   
 
