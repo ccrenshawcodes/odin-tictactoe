@@ -1,11 +1,9 @@
 const controlBoard = (() => {
 
-  const gameBoard = ['','','','','','','','',''];
+  let gameBoard = ['','','','','','','','',''];
   const getBoard = () => gameBoard;
 
-  const resetBoard = () => {
-    gameBoard.forEach(item => item === '');
-  }
+  const resetBoard = () => gameBoard = ['','','','','','','','',''];
 
   function placeToken (board, position, player) {
     if (board[position] === '') {
@@ -110,6 +108,7 @@ const controlGameFlow = (() => {
 const controlDisplay = (() => {
   const slots = document.querySelectorAll('.slot');
   const winnerMessage = document.querySelector('.winner-message');
+  const turnReminder = document.querySelector('.turn-display');
 
 
   function renderBoard (board) {
@@ -123,6 +122,7 @@ const controlDisplay = (() => {
   renderBoard(controlBoard.getBoard());
 
   const endGame = () => {
+    turnReminder.textContent = '';
     slots.forEach(slot => {
       slot.removeEventListener('click', handleClick);
     })
@@ -139,11 +139,13 @@ const controlDisplay = (() => {
         winnerMessage.textContent = `Winner: ${controlGameFlow.getActive().playerName}!`;
       } else if (done === 'tie') {
         winnerMessage.textContent = `It's a tie!`;
-      }
-
+      } 
+    } else {
+      controlGameFlow.switchPlayer(); 
+      turnReminder.textContent = "It is " + controlGameFlow.getActive().playerName + "'s turn!";
     }
 
-    controlGameFlow.switchPlayer(); 
+
   }
 
   const enableButtons = () => {
@@ -167,12 +169,14 @@ const controlDisplay = (() => {
     document.querySelector('.start-modal').style.display = 'none';
     enableButtons();
     document.querySelector('.game-board').style.display = 'grid';
+    turnReminder.textContent = "It is " + controlGameFlow.getActive().playerName + "'s turn!";
   })
 
   const resetBtn = document.querySelector('.reset');
   resetBtn.addEventListener('click', () => {
     endGame();
     controlBoard.resetBoard();
+    renderBoard(controlBoard.getBoard());
     controlGameFlow.clearPlayers();
     document.querySelector('.game-board').style.display = 'none';
     document.querySelector('.winner-message').textContent = '';
@@ -189,6 +193,5 @@ const controlDisplay = (() => {
     playerTwoNameField.disabled = false;
 
   })
-  
 
 })();
