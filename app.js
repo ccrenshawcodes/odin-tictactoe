@@ -9,9 +9,8 @@ const controlBoard = (() => {
     if (board[position] === '') {
       board[position] = player;
       document.querySelector('.winner-message').textContent = '';
-  
     } else {
-      document.querySelector('.winner-message').textContent = 'this spot is already taken.';
+      alert('this spot is already taken.');
     }
   }
 
@@ -144,8 +143,6 @@ const controlDisplay = (() => {
       controlGameFlow.switchPlayer(); 
       turnReminder.textContent = "It is " + controlGameFlow.getActive().playerName + "'s turn!";
     }
-
-
   }
 
   const enableButtons = () => {
