@@ -53,11 +53,15 @@ const controlGameFlow = (() => {
 
     addPlayerOne.addEventListener('click', () => {
       playerList.push(Player(playerOneNameField.value, determineToken(playerList)));
+      playerOneNameField.disabled = true;
+      addPlayerOne.style.display = 'none';
       activePlayer = playerList[0];
     })
 
     addPlayerTwo.addEventListener('click', () => {
       playerList.push(Player(playerTwoNameField.value, determineToken(playerList)));
+      playerTwoNameField.disabled = true;
+      addPlayerTwo.style.display = 'none';
     })
 
   })();
@@ -74,12 +78,6 @@ const controlGameFlow = (() => {
   const getActive = () => activePlayer;
 
   function checkForWinner (board) {
-
-    function displayWinnerMessage () {
-      const message = document.querySelector('.winner-message');
-      message.textContent = 'Winner!';
-    }
-
     if (
       // horizontal
       (board[0] !== '' && board[0] === board[1] && board[0] === board[2]) ||
@@ -93,10 +91,8 @@ const controlGameFlow = (() => {
       (board[0] !== '' && board[0] === board[4] && board[0] === board[8]) ||
       (board[2] !== '' && board[2] === board[4] && board[2] === board[6])
     ) {
-      displayWinnerMessage();
       return true;
     } else if (!board.includes('')) { //handle tie
-      displayWinnerMessage();
       return true;
     }
   }
@@ -125,22 +121,29 @@ const controlDisplay = (() => {
   }
   renderBoard(controlBoard.getBoard());
 
+  //  this does not handle for ties yet
+  function displayWinnerName (winner) {
+    const winnerMessage = document.querySelector('.winner-message');
+    winnerMessage.textContent = `Winner: ${winner}!`;
+  }
 
   const endGame = () => {
     slots.forEach(slot => {
       slot.removeEventListener('click', handleClick);
     })
+    displayWinnerName(controlGameFlow.getActive().playerName);
   }
 
-    const handleClick = (e) => {
+  const handleClick = (e) => {
     controlBoard.placeToken(controlBoard.getBoard(), e.target.getAttribute('data-position'), controlGameFlow.getActive().token);
-    controlGameFlow.switchPlayer(); 
     renderBoard(controlBoard.getBoard());
 
     const done = controlGameFlow.checkForWinner(controlBoard.getBoard());
     if (done === true) {
       endGame();
     }
+
+    controlGameFlow.switchPlayer(); 
   }
 
   const enableButtons = () => {
@@ -158,7 +161,6 @@ const controlDisplay = (() => {
   closeBtn.addEventListener('click', () => {
     document.querySelector('.start-modal').style.display = 'none';
   })
-
 
   const startBtn = document.querySelector('.play-game');
   startBtn.addEventListener('click', () => {
