@@ -21,6 +21,7 @@
     </div>
 
     <div class="content">
+        <div class="turn-display"></div>
         <div class="game-board">
             <button class="slot" data-position='0'></button>
             <button class="slot" data-position='1'></button>
@@ -38,13 +39,13 @@
             <button class="exit">x</button>
 
             <label for="player-one">Player one name:</label>
-            <input type="text" id="player-one"/>
-            <button id="add-player-one">Submit</button>
+            <input type="text" id="player-one" class="name-field"/>
+            <button id="add-player-one" class="add-player-button">Submit</button>
             <span id="player-one-token"></span>
 
             <label for="player-two">Player two name:</label>
-            <input type="text" id="player-two">
-            <button id="add-player-two">Submit</button>
+            <input type="text" id="player-two" class="name-field">
+            <button id="add-player-two" class="add-player-button">Submit</button>
             <span id="player-two-token"></span>
             <button class="play-game">Play Game!</button>
         </div>
